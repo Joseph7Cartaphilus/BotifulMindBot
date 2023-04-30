@@ -10,7 +10,10 @@ from tensorflow.keras.optimizers import SGD
 
 lemmatizer = WordNetLemmatizer()
 
-intents = json.loads(open('intents.json').read())
+intents = json.loads(open('intents.json', encoding='utf-8').read())
+
+# with open('data.json', encoding='utf-8') as file:
+#     intents = json.load(file)
 
 words = []
 classes = []
