@@ -4,7 +4,7 @@ import pickle
 import numpy as np
 import nltk
 from nltk.stem import WordNetLemmatizer
-from tensorflow.keras.models import load_model
+from keras.models import load_model
 
 lemmatizer = WordNetLemmatizer()
 intents = json.loads(open('intents.json', encoding='utf-8').read())
@@ -43,6 +43,25 @@ def predict_class(sentence):
     return return_list
 
 
+def get_bot_response(message):
+    sentence_words = nltk.word_tokenize(message)
+    sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
+    bag_of_words = [0] * len(words)
+    for w in sentence_words:
+        for i, word in enumerate(words):
+            if word == w:
+                bag_of_words[i] = 1
+    intent_predictions = model.predict(np.array([bag_of_words]))[0]
+    predicted_intent_index = np.argmax(intent_predictions)
+    predicted_intent_tag = classes[predicted_intent_index]
+
+    for intent in intents['intents']:
+        if intent['tag'] == predicted_intent_tag:
+            response = random.choice(intent['responses'])
+            break
+    return response
+
+
 def get_response(intents_list, intents_json):
     tag = intents_list[0]['intent']
     list_of_intents = intents_json['intents']
@@ -59,3 +78,10 @@ while True:
     ints = predict_class(message)
     res = get_response(ints, intents)
     print(res)
+
+
+
+
+
+
+
