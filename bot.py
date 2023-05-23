@@ -104,7 +104,7 @@ def register_message(message):
 
     # Хеширование пароля пользователя
     salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(user_id.encode('utf-8'), salt)
+    hashed_password = bcrypt.hashpw(str(user_id).encode('utf-8'), salt)
 
     # Регистрация пользователя в базе данных
     conn = sqlite3.connect('database.db')
@@ -170,4 +170,5 @@ def show_history(message):
 
 
 # Запуск бота
+print('Бот запущен')
 bot.polling()
